@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import IController from "./interfaces/IController";
 import Passport from "./passport";
 
@@ -20,9 +21,11 @@ class App {
   private initializeMiddlewares() {
     this.app.use(morgan("dev"));
 
+    this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     Passport.passportLocalMiddleware();
+    Passport.passportJWTMiddleware();
   }
 
   private initializeControllers(controllers: IController[]) {
