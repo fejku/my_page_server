@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import IController from "./interfaces/IController";
+import Passport from "./passport";
 
 class App {
   public app: express.Application;
@@ -21,6 +22,7 @@ class App {
 
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    Passport.passportLocalMiddleware();
   }
 
   private initializeControllers(controllers: IController[]) {
