@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import IController from "./interfaces/IController";
+import IRoute from "./interfaces/IRoute";
 import Passport from "./passport";
 
 class App {
@@ -10,12 +10,12 @@ class App {
 
   private mongoose = mongoose;
 
-  constructor(controllers: IController[]) {
+  constructor(routes: IRoute[]) {
     this.app = express();
 
     this.connectToTheDatabase();
     this.initializeMiddlewares();
-    this.initializeControllers(controllers);
+    this.initializeRoutes(routes);
   }
 
   private initializeMiddlewares() {
@@ -28,9 +28,9 @@ class App {
     Passport.passportJWTMiddleware();
   }
 
-  private initializeControllers(controllers: IController[]) {
-    controllers.forEach((controller) => {
-      this.app.use("/", controller.router);
+  private initializeRoutes(routes: IRoute[]) {
+    routes.forEach((route) => {
+      this.app.use(route.path, route.router);
     });
   }
 
