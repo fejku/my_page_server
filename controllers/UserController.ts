@@ -37,10 +37,10 @@ class UserController  {
     response.json({ user: { username: "", role: "" }, success: true });
   };
 
-  // private authenticated = async (request: express.Request, response: express.Response) => {
-  //   const { username, role } = <IUser>request.user;
-  //   response.status(200).json({ isAuthenticated: true, user: { username, role } });
-  // };
+  public authenticated = async (request: express.Request, response: express.Response) => {
+    const { username, role } = <IUser>request.user;
+    response.status(200).json({ isAuthenticated: true, user: { username, role } });
+  };
 }
 
 export default UserController;
