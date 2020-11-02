@@ -2,9 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 
 class AuthController {
-
   public authenticateLocal(request: Request, response: Response, next: NextFunction) {
-    passport.authenticate("local", { session: false })(request, response, next)
+    passport.authenticate("local", { session: false })(request, response, next);
   }
 
   public authenticateJWT(request: Request, response: Response, next: NextFunction) {
@@ -18,7 +17,7 @@ class AuthController {
       }
 
       return next();
-    })(request, response, next)
+    })(request, response, next);
   }
 }
 

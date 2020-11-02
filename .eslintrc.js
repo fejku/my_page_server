@@ -14,5 +14,6 @@ module.exports = {
     "import/no-unresolved": [0],
     "import/extensions": [0],
     "no-console": [0],
+    "lines-between-class-members": [0],
   },
 };

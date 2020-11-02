@@ -2,10 +2,13 @@ import express from "express";
 import { IUser, UserModel } from "../models/UserModel";
 import AuthUtils from "../utils/AuthUtils";
 
-class UserController  {
-
+class UserController {
   public register = async (request: express.Request, response: express.Response) => {
     const { username, password, role } = <IUser>request.body;
+
+    if (!username || !password || !role) {
+      response.status(400).json({ message: "Nie wypełniono wszystkich pól!" });
+    }
 
     try {
       const user = await UserModel.findOne({ username });
@@ -20,7 +23,7 @@ class UserController  {
       }
     } catch (error) {
       response.status(500).json({ message: "Error while finding user." });
-    }    
+    }
   };
 
   public login = async (request: express.Request, response: express.Response) => {
