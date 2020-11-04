@@ -7,19 +7,19 @@ class UserController {
     const { username, password, role } = <IUser>request.body;
 
     if (!username || !password || !role) {
-      response.status(400).json({ message: "Nie wypełniono wszystkich pól!" });
+      response.status(400).json({ message: "Nie wypełniono wszystkich pól." });
     }
 
     try {
       const user = await UserModel.findOne({ username });
 
       if (user) {
-        response.status(400).json({ message: "Username is already taken" });
+        response.status(400).json({ message: "Istnieje już taka nazwa użytkownika." });
       } else {
         const passwordHash = await AuthUtils.hashPassword(password);
         const newUser = new UserModel({ username, password: passwordHash, role });
         await newUser.save();
-        response.sendStatus(201);
+        response.status(201).json({ message: "Dodano użytkownika." });
       }
     } catch (error) {
       response.status(500).json({ message: "Error while finding user." });
