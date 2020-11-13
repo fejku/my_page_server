@@ -16,6 +16,7 @@ class AuthController {
         return response.status(401).json({ status: "error", code: { message: "unauthorized" } });
       }
 
+      request.user = user;
       return next();
     })(request, response, next);
   }
