@@ -11,7 +11,7 @@ class AuthUtils {
   };
 
   public static signToken = (userId: string) => {
-    return JWT.sign({ userId }, process.env.APP_SECRET!, { expiresIn: "1h" });
+    return JWT.sign({ userId }, process.env.APP_SECRET!, { expiresIn: "1y" });
   };
 }
 
