@@ -16,6 +16,7 @@ class TagiRoutes {
 
   routes() {
     this.router.get("/", this.authController.authenticateJWT, this.tagiController.getAllTagi);
+    this.router.post("/", this.authController.authenticateJWT, this.tagiController.createTag);
   }
 }
 
