@@ -1,6 +1,6 @@
 import { Router } from "express";
 import IRoute from "../interfaces/IRoute";
-import PosilkiRoutes from "./apps/PosilkiRoutes";
+import PosilkiRoutes from "./apps/posilki/PosilkiRoutes";
 
 class AppsRoutes {
   public path = "/apps";

@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { ITag } from "./TagModel";
 
-export interface IPosilek extends Document {
+export interface IPotrawa extends Document {
   nazwa: string;
   zdjecie?: string;
   uwagi?: string;
@@ -9,7 +9,7 @@ export interface IPosilek extends Document {
   tagi?: ITag[];
 }
 
-export const PosilekSchema = new Schema({
+export const PotrawaSchema = new Schema({
   nazwa: { type: String, required: true },
   zdjecie: { type: String },
   uwagi: { type: String },
@@ -17,4 +17,4 @@ export const PosilekSchema = new Schema({
   tagi: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
 });
 
-export const PosilekModel = mongoose.model<IPosilek>("Posilek", PosilekSchema, "potrawy");
+export const PotrawaModel = mongoose.model<IPotrawa>("Potrawa", PotrawaSchema, "potrawy");
