@@ -11,6 +11,13 @@ class TagiController {
     }
   };
 
+  public getTagById = (request: express.Request, response: express.Response) => {
+    const { id } = request.params;
+    TagModel.findById(id).then((tag) => {
+      response.send(tag);
+    });
+  };
+
   public createTag = async (request: express.Request, response: express.Response) => {
     const tagData: ITag = request.body;
 
@@ -20,6 +27,16 @@ class TagiController {
       response.status(201).send(savedTag);
     } catch (error) {
       response.status(500).json({ message: `Błąd przy tworzeniu taga: ${error}` });
+    }
+  };
+
+  public deleteTag = async (request: express.Request, response: express.Response) => {
+    const { id } = request.params;
+    try {
+      await TagModel.findByIdAndDelete(id);
+      response.json({ message: "Usunięto tag" });
+    } catch (error) {
+      response.status(500).json({ message: `Błąd przy usuwaniu taga: ${error}` });
     }
   };
 }

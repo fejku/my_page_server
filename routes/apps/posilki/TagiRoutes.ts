@@ -16,7 +16,9 @@ class TagiRoutes {
 
   routes() {
     this.router.get("/", this.authController.authenticateJWT, this.tagiController.getAllTagi);
+    this.router.get("/:id", this.authController.authenticateJWT, this.tagiController.getTagById);
     this.router.post("/", this.authController.authenticateJWT, this.tagiController.createTag);
+    this.router.delete("/:id", this.authController.authenticateJWT, this.tagiController.deleteTag);
   }
 }
 
