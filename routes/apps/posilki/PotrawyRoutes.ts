@@ -16,6 +16,9 @@ class PotrawyRoutes {
 
   routes() {
     this.router.get("/", this.authController.authenticateJWT, this.potrawyController.getAllPotrawy);
+    this.router.get("/:id", this.authController.authenticateJWT, this.potrawyController.getPotraweById);
+    this.router.post("/", this.authController.authenticateJWT, this.potrawyController.createPotrawe);
+    this.router.delete("/:id", this.authController.authenticateJWT, this.potrawyController.deletePotrawe);
   }
 }
 

@@ -11,11 +11,14 @@ class TagiController {
     }
   };
 
-  public getTagById = (request: express.Request, response: express.Response) => {
+  public getTagById = async (request: express.Request, response: express.Response) => {
     const { id } = request.params;
-    TagModel.findById(id).then((tag) => {
+    try {
+      const tag = await TagModel.findById(id);
       response.send(tag);
-    });
+    } catch (error) {
+      response.status(500).json({ message: `Błąd przy pobieraniu taga: ${error}` });
+    }
   };
 
   public createTag = async (request: express.Request, response: express.Response) => {
