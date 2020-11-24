@@ -28,7 +28,9 @@ class PotrawyController {
     const createdPotrawa = new PotrawaModel(potrawaData);
     try {
       const savedPotrawa = await createdPotrawa.save();
-      response.status(201).send(savedPotrawa);
+      // nie zwracam zapisanej, ponieważ nie działa populate dla tagów
+      const nowaPotrawa = await PotrawaModel.findById(savedPotrawa._id).populate({ path: "tagi", Model: TagModel }); // eslint-disable-line no-underscore-dangle
+      response.status(201).send(nowaPotrawa);
     } catch (error) {
       response.status(500).json({ message: `Błąd przy tworzeniu potrawy: ${error}` });
     }
