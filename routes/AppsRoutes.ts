@@ -1,22 +1,10 @@
-import { Router } from "express";
-import IRoute from "../interfaces/IRoute";
+import Routes from "./apps/Routes";
 import PosilkiRoutes from "./apps/posilki/PosilkiRoutes";
+import SprawdzanieMangiRoutes from "./apps/sprawdzanie-mangi/SprawdzanieMangiRoutes";
 
-class AppsRoutes {
-  public path = "/apps";
-
-  public router: Router;
-
+class AppsRoutes extends Routes {
   constructor() {
-    this.router = Router();
-    const appsRoutes = [new PosilkiRoutes()];
-    this.initializeRoutes(appsRoutes);
-  }
-
-  private initializeRoutes(routes: IRoute[]) {
-    routes.forEach((route) => {
-      this.router.use(route.path, route.router);
-    });
+    super("/apps", [new PosilkiRoutes(), new SprawdzanieMangiRoutes()]);
   }
 }
 

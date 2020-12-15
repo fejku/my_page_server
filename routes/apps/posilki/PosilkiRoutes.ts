@@ -1,23 +1,10 @@
-import { Router } from "express";
-import IRoute from "../../../interfaces/IRoute";
+import Routes from "../Routes";
 import PotrawyRoutes from "./PotrawyRoutes";
 import TagiRoutes from "./TagiRoutes";
 
-class PosilkiRoutes {
-  public path = "/posilki";
-
-  public router: Router;
-
+class PosilkiRoutes extends Routes {
   constructor() {
-    this.router = Router();
-    const posilkiRoutes = [new PotrawyRoutes(), new TagiRoutes()];
-    this.initializeRoutes(posilkiRoutes);
-  }
-
-  private initializeRoutes(routes: IRoute[]) {
-    routes.forEach((route) => {
-      this.router.use(route.path, route.router);
-    });
+    super("/posilki", [new PotrawyRoutes(), new TagiRoutes()]);
   }
 }
 
