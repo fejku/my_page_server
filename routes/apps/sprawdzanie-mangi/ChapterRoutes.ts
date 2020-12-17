@@ -16,10 +16,7 @@ class ChapterRoutes {
 
   routes() {
     this.router.get("/", this.authController.authenticateJWT, this.chapterController.getAll);
-    // this.router.get("/:id", this.authController.authenticateJWT, this.chapterController.getPotraweById);
-    // this.router.post("/", this.authController.authenticateJWT, this.chapterController.createPotrawe);
-    // this.router.put("/:id", this.authController.authenticateJWT, this.chapterController.editPotrawe);
-    // this.router.delete("/:id", this.authController.authenticateJWT, this.chapterController.deletePotrawe);
+    this.router.post("/url", this.authController.authenticateJWT, this.chapterController.getChapteryByUrl);
   }
 }
 

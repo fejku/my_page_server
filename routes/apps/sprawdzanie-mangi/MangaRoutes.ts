@@ -16,11 +16,9 @@ class MangaRoutes {
 
   routes() {
     this.router.get("/", this.authController.authenticateJWT, this.mangaController.getAll);
-    // this.router.get("/", this.authController.authenticateJWT, this.mangaController.getAllPotrawy);
-    // this.router.get("/:id", this.authController.authenticateJWT, this.mangaController.getPotraweById);
-    // this.router.post("/", this.authController.authenticateJWT, this.mangaController.createPotrawe);
-    // this.router.put("/:id", this.authController.authenticateJWT, this.mangaController.editPotrawe);
-    // this.router.delete("/:id", this.authController.authenticateJWT, this.mangaController.deletePotrawe);
+    this.router.get("/:id/chaptery", this.authController.authenticateJWT, this.mangaController.getAllChapters);
+    this.router.post("/", this.authController.authenticateJWT, this.mangaController.create);
+    this.router.delete("/:id", this.authController.authenticateJWT, this.mangaController.delete);
   }
 }
 
