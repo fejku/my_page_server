@@ -4,7 +4,7 @@ import cheerio from "cheerio";
 import { ChapterModel } from "../../../models/apps/sprawdzanie-mangi/ChapterModel";
 import IPobieranieChapterowWynikDTO, {
   IPobieranieChapterowChapterDTO,
-} from "../../../interfaces/IPobieranieChapterowWynikDTO";
+} from "../../../interfaces/sprawdzanie-mangi/IPobieranieChapterowWynikDTO";
 
 class ChapterController {
   public getAll = async (request: express.Request, response: express.Response) => {

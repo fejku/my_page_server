@@ -1,8 +1,11 @@
 import express from "express";
-import IZapisanieMangiKryteriaDTO from "../../../interfaces/IZapisanieMangiKryteriaDTO";
-import { ChapterModel } from "../../../models/apps/sprawdzanie-mangi/ChapterModel";
+import cloudscraper from "cloudscraper";
+import cheerio from "cheerio";
+import IZapisanieMangiKryteriaDTO from "../../../interfaces/sprawdzanie-mangi/IZapisanieMangiKryteriaDTO";
+import { ChapterModel, IChapter } from "../../../models/apps/sprawdzanie-mangi/ChapterModel";
 import { MangaModel } from "../../../models/apps/sprawdzanie-mangi/MangaModel";
 import { IUser } from "../../../models/UserModel";
+import IOdswiezenieMangiWynikDTO from "../../../interfaces/sprawdzanie-mangi/IOdswiezenieMangiWynikDTO";
 
 class MangaController {
   public getAll = async (request: express.Request, response: express.Response) => {
@@ -34,7 +37,7 @@ class MangaController {
         url: mangaUrl,
         user: _id,
         ostatniChapter: mangaAktualnyChapter,
-        ostatnieOdswiezenie: Date.now(),
+        ostatnieOdswiezenie: new Date(),
       });
       const savedManga = await createdManga.save();
 
@@ -53,6 +56,65 @@ class MangaController {
       response.status(201).json({ mangaNazwa });
     } catch (error) {
       response.status(500).json({ message: `Błąd przy tworzeniu potrawy: ${error}` });
+    }
+  };
+
+  public odswiez = async (request: express.Request, response: express.Response) => {
+    try {
+      const { id } = request.params;
+
+      const manga = await MangaModel.findById(id);
+
+      if (manga) {
+        await ChapterModel.deleteMany({ manga: id });
+
+        const res = await cloudscraper.get(manga.url);
+        const body = await res;
+        const $ = cheerio.load(body);
+
+        const iloscChapterow = $("#chapter_table .chico").length;
+
+        const dodaneChaptery = <IChapter[]>[];
+        $("#chapter_table .chico").each((i, e) => {
+          const dodanyChapter = new ChapterModel({
+            manga: id,
+            url: $(e).attr("href")!,
+            numer: $(e).find("b").html()!,
+            kolejnosc: iloscChapterow - 1 - i,
+          });
+          dodaneChaptery.push(dodanyChapter);
+        });
+
+        const zapisaneChaptery = <IChapter[]>[];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const dodanyChapter of dodaneChaptery) {
+          const zapisanyChapter = await dodanyChapter.save(); // eslint-disable-line no-await-in-loop
+          zapisaneChaptery.push(zapisanyChapter);
+        }
+
+        manga.ostatnieOdswiezenie = new Date();
+        await manga.save();
+
+        const result: IOdswiezenieMangiWynikDTO = {
+          chaptery: zapisaneChaptery,
+          ostatnieOdswiezenie: manga.ostatnieOdswiezenie,
+        };
+
+        response.send(result);
+      }
+    } catch (error) {
+      response.status(500).json({ message: `Błąd przy pobieraniu chapterów: ${error}` });
+    }
+  };
+
+  public edit = async (request: express.Request, response: express.Response) => {
+    const { id } = request.params;
+    try {
+      const zedtowanaManga = await MangaModel.findByIdAndUpdate(id, request.body, { new: true });
+
+      response.status(201).send(zedtowanaManga);
+    } catch (error) {
+      response.status(500).json({ message: `Błąd przy usuwaniu taga: ${error}` });
     }
   };
 

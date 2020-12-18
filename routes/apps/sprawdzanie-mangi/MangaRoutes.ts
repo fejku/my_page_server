@@ -17,7 +17,9 @@ class MangaRoutes {
   routes() {
     this.router.get("/", this.authController.authenticateJWT, this.mangaController.getAll);
     this.router.get("/:id/chaptery", this.authController.authenticateJWT, this.mangaController.getAllChapters);
+    this.router.get("/:id/odswiez", this.authController.authenticateJWT, this.mangaController.odswiez);
     this.router.post("/", this.authController.authenticateJWT, this.mangaController.create);
+    this.router.put("/:id", this.authController.authenticateJWT, this.mangaController.edit);
     this.router.delete("/:id", this.authController.authenticateJWT, this.mangaController.delete);
   }
 }
