@@ -85,12 +85,7 @@ class MangaController {
           dodaneChaptery.push(dodanyChapter);
         });
 
-        const zapisaneChaptery = <IChapter[]>[];
-        // eslint-disable-next-line no-restricted-syntax
-        for (const dodanyChapter of dodaneChaptery) {
-          const zapisanyChapter = await dodanyChapter.save(); // eslint-disable-line no-await-in-loop
-          zapisaneChaptery.push(zapisanyChapter);
-        }
+        const zapisaneChaptery = await Promise.all(dodaneChaptery.map((dodanyChapter) => dodanyChapter.save()));
 
         manga.ostatnieOdswiezenie = new Date();
         await manga.save();
