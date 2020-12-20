@@ -42,6 +42,14 @@ class ChapterController {
       response.status(500).json({ message: `Błąd przy pobieraniu chapterów: ${error}` });
     }
   };
+
+  public test = async (request: express.Request, response: express.Response) => {
+    try {
+      response.send("TEST");
+    } catch (error) {
+      response.status(500).json({ message: `Błąd przy pobieraniu chapterów: ${error}` });
+    }
+  };
 }
 
 export default ChapterController;
