@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import IRoute from "./interfaces/IRoute";
 import Passport from "./passport";
 
@@ -21,6 +22,7 @@ class App {
   private initializeMiddlewares() {
     this.app.use(morgan("dev"));
 
+    this.app.use(cors());
     this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
