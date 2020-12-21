@@ -34,6 +34,7 @@ class UserController {
         // domain: "fejku.github.io",
         expires: new Date(Date.now() + 900000),
         secure: true,
+        sameSite: "none",
         // httpOnly: true,
       });
       response.status(200).json({ isAuthenticated: true, user: { username, role } });
