@@ -21,8 +21,6 @@ class App {
   private initializeMiddlewares() {
     this.app.use(morgan("dev"));
 
-    this.app.use(cookieParser());
-
     // eslint-disable-next-line func-names
     this.app.use(function (req: express.Request, res: express.Response, next) {
       res.header("Access-Control-Allow-Origin", "https://fejku.github.io"); // update to match the domain you will make the request from
@@ -33,7 +31,8 @@ class App {
       res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
       next();
     });
-
+    this.app.set("trust proxy", 1);
+    this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     Passport.passportLocalMiddleware();
