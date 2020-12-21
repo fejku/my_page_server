@@ -31,7 +31,7 @@ class UserController {
       const { _id, username, role } = <IUser>request.user;
       const token = AuthUtils.signToken(_id);
       response.cookie("access_token", token, {
-        domain: "https://fejku.github.io",
+        domain: "fejku.github.io",
         expires: new Date(Date.now() + 900000),
         secure: true,
         // httpOnly: true,
