@@ -30,7 +30,12 @@ class UserController {
     if (request.isAuthenticated()) {
       const { _id, username, role } = <IUser>request.user;
       const token = AuthUtils.signToken(_id);
-      response.cookie("access_token", token, { secure: true });
+      response.cookie("access_token", token, {
+        domain: "fejku.github.io",
+        expires: new Date(Date.now() + 900000),
+        secure: true,
+        // httpOnly: true,
+      });
       response.status(200).json({ isAuthenticated: true, user: { username, role } });
     }
   };
