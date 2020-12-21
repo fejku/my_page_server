@@ -30,7 +30,7 @@ class UserController {
     if (request.isAuthenticated()) {
       const { _id, username, role } = <IUser>request.user;
       const token = AuthUtils.signToken(_id);
-      response.cookie("access_token", token);
+      response.cookie("access_token", token, { httpOnly: true, sameSite: true });
       response.status(200).json({ isAuthenticated: true, user: { username, role } });
     }
   };
