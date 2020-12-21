@@ -22,7 +22,7 @@ class App {
   private initializeMiddlewares() {
     this.app.use(morgan("dev"));
 
-    this.app.use(cors({ exposedHeaders: "*" }));
+    this.app.use(cors({ exposedHeaders: ["Set-Cookie"] }));
     this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
