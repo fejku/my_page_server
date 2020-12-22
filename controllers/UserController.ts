@@ -31,9 +31,9 @@ class UserController {
       const { _id, username, role } = <IUser>request.user;
       const token = AuthUtils.signToken(_id);
       response.cookie("access_token", token, {
-        domain: ".github.io",
+        // domain: ".github.io",
         expires: new Date(Date.now() + 900000),
-        secure: true,
+        // secure: true,
         // httpOnly: true,
       });
       response.status(200).json({ isAuthenticated: true, user: { username, role } });
