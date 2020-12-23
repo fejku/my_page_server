@@ -10,7 +10,7 @@ class ChapterController {
   public getAll = async (request: express.Request, response: express.Response) => {
     try {
       const chaptery = await ChapterModel.find();
-      response.send(chaptery);
+      response.send(chaptery.sort((a, b) => a.kolejnosc - b.kolejnosc));
     } catch (error) {
       response.status(500).json({ message: `Błąd przy pobieraniu chapterów: ${error}` });
     }
@@ -35,7 +35,10 @@ class ChapterController {
         };
         chaptery.push(chapter);
       });
-      const result: IPobieranieChapterowWynikDTO = { nazwaMangi, chaptery };
+      const result: IPobieranieChapterowWynikDTO = {
+        nazwaMangi,
+        chaptery: chaptery.sort((a, b) => a.kolejnosc - b.kolejnosc),
+      };
 
       response.send(result);
     } catch (error) {

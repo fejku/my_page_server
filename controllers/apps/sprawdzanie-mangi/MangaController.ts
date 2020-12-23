@@ -22,7 +22,7 @@ class MangaController {
     try {
       const { id } = request.params;
       const chaptery = await ChapterModel.find({ manga: id });
-      response.send(chaptery);
+      response.send(chaptery.sort((a, b) => a.kolejnosc - b.kolejnosc));
     } catch (error) {
       response.status(500).json({ message: `Błąd przy pobieraniu mang: ${error}` });
     }
@@ -91,7 +91,7 @@ class MangaController {
         await manga.save();
 
         const result: IOdswiezenieMangiWynikDTO = {
-          chaptery: zapisaneChaptery,
+          chaptery: zapisaneChaptery.sort((a, b) => a.kolejnosc - b.kolejnosc),
           ostatnieOdswiezenie: manga.ostatnieOdswiezenie,
         };
 
