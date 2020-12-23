@@ -22,10 +22,7 @@ class App {
 
     // eslint-disable-next-line func-names
     this.app.use(function (req: express.Request, res: express.Response, next) {
-      res.header("Access-Control-Allow-Origin", process.env.FRONT_ORIGIN); // update to match the domain you will make the request from
-      res.header("Access-Control-Allow-Origin", "https://fejku.github.io"); // update to match the domain you will make the request from
-      // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
+      res.header("Access-Control-Allow-Origin", process.env.FRONT_ORIGIN);
       res.header("Access-Control-Allow-Headers", "Content-Type, X-Access-Token");
       res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
       next();
