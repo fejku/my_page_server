@@ -1,8 +1,7 @@
-import express from "express";
 import passport from "passport";
 import bcrypt from "bcrypt";
 import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as JwtStrategy } from "passport-jwt";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { UserModel } from "./models/UserModel";
 
 class Passport {
@@ -29,19 +28,20 @@ class Passport {
     );
   };
 
-  private static cookieExtractor = (request: express.Request) => {
-    let token = null;
-    if (request && request.cookies) {
-      token = request.cookies.access_token;
-    }
-    return token;
-  };
+  // Przekazywanie tokena JWT przez cookies
+  // private static cookieExtractor = (request: express.Request) => {
+  //   let token = null;
+  //   if (request && request.cookies) {
+  //     token = request.cookies.access_token;
+  //   }
+  //   return token;
+  // };
 
   public static passportJWTMiddleware = () => {
     passport.use(
       new JwtStrategy(
         {
-          jwtFromRequest: Passport.cookieExtractor,
+          jwtFromRequest: ExtractJwt.fromHeader("x-access-token"),
           secretOrKey: process.env.APP_SECRET,
         },
         async (payload, done) => {

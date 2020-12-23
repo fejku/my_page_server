@@ -1,7 +1,6 @@
 import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
-import cookieParser from "cookie-parser";
 import IRoute from "./interfaces/IRoute";
 import Passport from "./passport";
 
@@ -23,16 +22,14 @@ class App {
 
     // eslint-disable-next-line func-names
     this.app.use(function (req: express.Request, res: express.Response, next) {
-      res.header("Access-Control-Allow-Origin", "https://fejku.github.io"); // update to match the domain you will make the request from
+      res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+      // res.header("Access-Control-Allow-Origin", "https://fejku.github.io"); // update to match the domain you will make the request from
       // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-      res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-      res.header("Access-Control-Allow-Credentials", "true");
+      res.header("Access-Control-Allow-Headers", "Content-Type, X-Access-Token");
       res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
       next();
     });
-    this.app.set("trust proxy", 1);
-    this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     Passport.passportLocalMiddleware();

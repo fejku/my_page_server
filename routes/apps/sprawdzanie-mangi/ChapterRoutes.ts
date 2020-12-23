@@ -17,8 +17,6 @@ class ChapterRoutes {
   routes() {
     this.router.get("/", this.authController.authenticateJWT, this.chapterController.getAll);
     this.router.post("/url", this.authController.authenticateJWT, this.chapterController.getChapteryByUrl);
-
-    this.router.post("/test", this.chapterController.test);
   }
 }
 

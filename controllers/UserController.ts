@@ -30,19 +30,13 @@ class UserController {
     if (request.isAuthenticated()) {
       const { _id, username, role } = <IUser>request.user;
       const token = AuthUtils.signToken(_id);
-      response.cookie("access_token", token, {
-        // domain: ".github.io",
-        expires: new Date(Date.now() + 900000),
-        // secure: true,
-        // httpOnly: true,
-      });
-      response.status(200).json({ isAuthenticated: true, user: { username, role } });
-    }
-  };
 
-  public logout = async (request: express.Request, response: express.Response) => {
-    response.clearCookie("access_token");
-    response.json({ user: { username: "", role: "" }, success: true });
+      response.status(200).json({
+        isAuthenticated: true,
+        user: { username, role },
+        accessToken: token,
+      });
+    }
   };
 
   public authenticated = async (request: express.Request, response: express.Response) => {

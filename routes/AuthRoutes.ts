@@ -17,7 +17,6 @@ class AuthRoutes {
   routes() {
     this.router.post("/register", this.userController.register);
     this.router.post("/login", this.authController.authenticateLocal, this.userController.login);
-    this.router.get("/logout", this.authController.authenticateJWT, this.userController.logout);
     this.router.get("/authenticated", this.authController.authenticateJWT, this.userController.authenticated);
   }
 }
