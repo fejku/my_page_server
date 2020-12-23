@@ -25,6 +25,8 @@ class App {
       res.header("Access-Control-Allow-Origin", process.env.FRONT_ORIGIN);
       res.header("Access-Control-Allow-Headers", "Content-Type, X-Access-Token");
       res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+      res.header("Access-Control-Allow-Credentials", "true");
+
       next();
     });
     this.app.use(express.json());
