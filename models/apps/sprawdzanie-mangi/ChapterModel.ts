@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IChapter extends Document {
   manga: string;
   url: string;
+  dataDodania: string;
   numer: string;
   kolejnosc: number;
 }
@@ -10,6 +11,7 @@ export interface IChapter extends Document {
 export const ChapterSchema = new Schema({
   manga: { type: Schema.Types.ObjectId, ref: "Manga" },
   url: { type: String, required: true },
+  dataDodania: { type: String, required: true },
   numer: { type: String, required: true },
   kolejnosc: { type: Number, required: true },
 });

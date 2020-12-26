@@ -1,18 +1,20 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface IManga extends Document {
-  nazwa: string;
-  url: string;
   user: string;
-  ostatniChapter: string;
+  tytul: string;
+  okladka: string;
+  url: string;
+  aktualnyChapter: string;
   ostatnieOdswiezenie: Date;
 }
 
 export const MangaSchema = new Schema({
-  nazwa: { type: String, required: true },
-  url: { type: String, required: true },
   user: { type: Schema.Types.ObjectId, ref: "User" },
-  ostatniChapter: { type: String, required: true },
+  tytul: { type: String, required: true },
+  okladka: { type: String, required: true },
+  url: { type: String, required: true },
+  aktualnyChapter: { type: String, required: true },
   ostatnieOdswiezenie: { type: Date, required: true },
 });
 

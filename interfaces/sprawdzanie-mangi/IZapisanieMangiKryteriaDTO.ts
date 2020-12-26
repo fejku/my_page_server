@@ -1,10 +1,11 @@
-import { IPobieranieChapterowChapterDTO } from "./IPobieranieChapterowWynikDTO";
+import { IPobieranieMangiWynikDTOChapter, IPobieranieMangiWynikDTOManga } from "./IPobieranieMangiWynikDTO";
 
-interface IZapisanieMangiKryteriaDTO {
-  mangaNazwa: string;
-  mangaUrl: string;
-  mangaAktualnyChapter: string;
-  chaptery: IPobieranieChapterowChapterDTO[];
+export interface IZapisanieMangiKryteriaDTOManga extends IPobieranieMangiWynikDTOManga {
+  url: string;
+  aktualnyChapter: string;
 }
 
-export default IZapisanieMangiKryteriaDTO;
+export default interface IZapisanieMangiKryteriaDTO {
+  manga: IZapisanieMangiKryteriaDTOManga;
+  chaptery: IPobieranieMangiWynikDTOChapter[];
+}

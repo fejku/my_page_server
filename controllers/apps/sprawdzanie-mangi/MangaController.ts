@@ -6,6 +6,8 @@ import { ChapterModel, IChapter } from "../../../models/apps/sprawdzanie-mangi/C
 import { MangaModel } from "../../../models/apps/sprawdzanie-mangi/MangaModel";
 import { IUser } from "../../../models/UserModel";
 import IOdswiezenieMangiWynikDTO from "../../../interfaces/sprawdzanie-mangi/IOdswiezenieMangiWynikDTO";
+import IPobieranieMangiKryteriaDTO from "../../../interfaces/sprawdzanie-mangi/IPobieranieMangiKryteriaDTO";
+import MangaParserFactory from "../../../services/sprawdzanie-mangi/MangaParserFactory";
 
 class MangaController {
   public getAll = async (request: express.Request, response: express.Response) => {
@@ -31,12 +33,14 @@ class MangaController {
   public create = async (request: express.Request, response: express.Response) => {
     try {
       const { _id } = <IUser>request.user;
-      const { mangaNazwa, mangaUrl, mangaAktualnyChapter, chaptery }: IZapisanieMangiKryteriaDTO = request.body;
+      const { manga, chaptery }: IZapisanieMangiKryteriaDTO = request.body;
+
       const createdManga = new MangaModel({
-        nazwa: mangaNazwa,
-        url: mangaUrl,
         user: _id,
-        ostatniChapter: mangaAktualnyChapter,
+        tytul: manga.tytul,
+        okladka: manga.okladka,
+        url: manga.url,
+        aktualnyChapter: manga.aktualnyChapter,
         ostatnieOdswiezenie: new Date(),
       });
       const savedManga = await createdManga.save();
@@ -46,16 +50,30 @@ class MangaController {
         const createdChapter = new ChapterModel({
           manga: savedManga._id, // eslint-disable-line no-underscore-dangle
           url: chapter.url,
+          dataDodania: chapter.dataDodania,
           numer: chapter.numer,
-          kolejnosc: chaptery.length - 1 - chapter.kolejnosc,
+          kolejnosc: chapter.kolejnosc,
         });
 
         await createdChapter.save(); // eslint-disable-line no-await-in-loop
       }
 
-      response.status(201).json({ mangaNazwa });
+      response.status(201).send({ tytul: savedManga.tytul });
     } catch (error) {
-      response.status(500).json({ message: `Błąd przy tworzeniu potrawy: ${error}` });
+      response.status(500).send({ message: `Błąd podczas zapisywania mangi: ${error}` });
+    }
+  };
+
+  public pobierzDane = async (request: express.Request, response: express.Response) => {
+    try {
+      const { url }: IPobieranieMangiKryteriaDTO = request.body;
+
+      const mangaParser = MangaParserFactory.getParser(url);
+      const parsedManga = await mangaParser.parse();
+
+      response.send(parsedManga);
+    } catch (error) {
+      response.status(500).json({ message: `Błąd przy pobieraniu danych mangi: ${error}` });
     }
   };
 
