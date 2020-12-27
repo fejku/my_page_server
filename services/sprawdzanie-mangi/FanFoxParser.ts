@@ -21,6 +21,7 @@ class FanFoxParser extends MangaParser {
     const url = root(element).find("a").attr("href");
     return url ? `http://fanfox.net${url}` : "";
   }
+
   protected getChapterDataDodania(root: cheerio.Root, element: cheerio.Element): string {
     const dataDodania = root(element).find(".title2").text();
     return dataDodania;
