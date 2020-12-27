@@ -2,15 +2,15 @@
 import cheerio from "cheerio";
 import MangaParser from "./MangaParser";
 
-class MangaReaderParser extends MangaParser {
+class MangaSeeParser extends MangaParser {
   protected getTytul(root: cheerio.Root): string {
     const tytul = root(".name").first().text();
     return tytul;
   }
 
   protected getOkladka(root: cheerio.Root): string {
-    const okladka = root(".d38 img").attr("src");
-    return okladka ? `https:/${okladka}` : "";
+    const okladka = root(".BoxBody").attr("src");
+    return okladka || "";
   }
 
   protected getChaptery(root: cheerio.Root): cheerio.Cheerio {
@@ -37,10 +37,6 @@ class MangaReaderParser extends MangaParser {
 
     return numer || "";
   }
-
-  protected getCzyListaChapterowOdNajnowszego() {
-    return false;
-  }
 }
 
-export default MangaReaderParser;
+export default MangaSeeParser;

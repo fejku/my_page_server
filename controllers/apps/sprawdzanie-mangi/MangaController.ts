@@ -1,6 +1,4 @@
 import express from "express";
-import cloudscraper from "cloudscraper";
-import cheerio from "cheerio";
 import IZapisanieMangiKryteriaDTO from "../../../interfaces/sprawdzanie-mangi/IZapisanieMangiKryteriaDTO";
 import { ChapterModel, IChapter } from "../../../models/apps/sprawdzanie-mangi/ChapterModel";
 import { MangaModel } from "../../../models/apps/sprawdzanie-mangi/MangaModel";
@@ -86,22 +84,21 @@ class MangaController {
       if (manga) {
         await ChapterModel.deleteMany({ manga: id });
 
-        const res = await cloudscraper.get(manga.url);
-        const body = await res;
-        const $ = cheerio.load(body);
-
-        const iloscChapterow = $("#chapter_table .chico").length;
+        const mangaParser = MangaParserFactory.getParser(manga.url);
+        const parsedManga = await mangaParser.parse();
 
         const dodaneChaptery = <IChapter[]>[];
-        $("#chapter_table .chico").each((i, e) => {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const chapter of parsedManga.chaptery) {
           const dodanyChapter = new ChapterModel({
-            manga: id,
-            url: $(e).attr("href")!,
-            numer: $(e).find("b").html()!,
-            kolejnosc: iloscChapterow - 1 - i,
+            manga: manga._id, // eslint-disable-line no-underscore-dangle
+            url: chapter.url,
+            dataDodania: chapter.dataDodania,
+            numer: chapter.numer,
+            kolejnosc: chapter.kolejnosc,
           });
           dodaneChaptery.push(dodanyChapter);
-        });
+        }
 
         const zapisaneChaptery = await Promise.all(dodaneChaptery.map((dodanyChapter) => dodanyChapter.save()));
 

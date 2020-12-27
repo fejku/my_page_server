@@ -1,7 +1,11 @@
+import FanFoxParser from "./FanFoxParser";
 import MangaReaderParser from "./MangaReaderParser";
+import MangaSeeParser from "./MangaSeeParser";
 
 enum HOSTNAME {
   MANGA_READER = "www.mangareader.net",
+  MANGA_FANFOX = "fanfox.net",
+  MANGA_SEE123 = "mangasee123.com",
 }
 
 class MangaParserFactory {
@@ -11,6 +15,10 @@ class MangaParserFactory {
     switch (hostname) {
       case HOSTNAME.MANGA_READER:
         return new MangaReaderParser(url);
+      case HOSTNAME.MANGA_FANFOX:
+        return new FanFoxParser(url);
+      case HOSTNAME.MANGA_SEE123:
+        return new MangaSeeParser(url);
       default:
         throw new Error(`Nie obsługiwany parser: ${hostname}.`);
     }
