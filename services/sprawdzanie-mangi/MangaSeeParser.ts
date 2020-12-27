@@ -1,41 +1,96 @@
 /* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+import axios from "axios";
 import cheerio from "cheerio";
-import MangaParser from "./MangaParser";
+import IPobieranieMangiWynikDTO, {
+  IPobieranieMangiWynikDTOChapter,
+} from "../../interfaces/sprawdzanie-mangi/IPobieranieMangiWynikDTO";
 
-class MangaSeeParser extends MangaParser {
-  protected getTytul(root: cheerio.Root): string {
-    const tytul = root(".name").first().text();
+interface IWynikPobieraniaChapterow {
+  Chapter: string;
+  Type: string;
+  Date: string;
+  ChapterName: string | null;
+}
+
+class MangaSeeParser {
+  constructor(protected readonly url: string) {} // eslint-disable-line no-empty-function
+
+  private getTytul(root: cheerio.Root): string {
+    const tytul = root(".BoxBody > div").eq(1).find("div").eq(1).children().html()!.trim();
     return tytul;
   }
 
-  protected getOkladka(root: cheerio.Root): string {
-    const okladka = root(".BoxBody").attr("src");
+  private getOkladka(root: cheerio.Root): string {
+    const okladka = root(".BoxBody > div").eq(1).find("img").attr("src");
     return okladka || "";
   }
 
-  protected getChaptery(root: cheerio.Root): cheerio.Cheerio {
-    return root(".d48 tr").not(".d49");
+  private getChaptery(data: string): IWynikPobieraniaChapterow[] {
+    const pattern = /(vm\.Chapters = \[{).+]/;
+    const chaptery = data.match(pattern)![0].slice("vm.Chapters = ".length);
+    return JSON.parse(chaptery);
   }
 
-  protected getChapterUrl(root: cheerio.Root, element: cheerio.Element): string {
-    const url = root(element).find("a").attr("href");
-    return url ? `https://www.mangareader.net${url}` : "";
-  }
-  protected getChapterDataDodania(root: cheerio.Root, element: cheerio.Element): string {
-    const dataDodania = root(element).find("td").eq(1).text();
-    return dataDodania;
-  }
+  private getChapterNumer = (chapter: string) => {
+    const chapterFullNumber = parseInt(chapter.slice(1, -1), 10);
+    const chapterHalfNumber = parseInt(chapter[chapter.length - 1], 10);
 
-  protected getChapterNumer(root: cheerio.Root, element: cheerio.Element): string {
-    let numer = "";
+    if (chapterHalfNumber === 0) {
+      return chapterFullNumber.toString();
+    }
+    return `${chapterFullNumber}.${chapterHalfNumber}`.toString();
+  };
 
-    const url = root(element).find("a").attr("href");
+  private getChapterURL = (chapter: string) => {
+    let indexResult = "";
+    const indexNumber = parseInt(chapter.substring(0, 1), 10);
 
-    if (url) {
-      [, , numer] = url.split("/");
+    if (indexNumber !== 1) {
+      indexResult = `-index-${indexNumber}`;
     }
 
-    return numer || "";
+    const chapterFullNumber = parseInt(chapter.slice(1, -1), 10);
+    let chapterHalfNumberResult = "";
+    const chapterHalfNumber = parseInt(chapter[chapter.length - 1], 10);
+
+    if (chapterHalfNumber !== 0) {
+      chapterHalfNumberResult = `.${chapterHalfNumber}`;
+    }
+    return `-chapter-${chapterFullNumber}${chapterHalfNumberResult}${indexResult}.html`;
+  };
+
+  async parse(): Promise<IPobieranieMangiWynikDTO> {
+    const responseManga = await axios.get(this.url);
+    const { data } = responseManga;
+    const $ = cheerio.load(data);
+
+    const tytul = this.getTytul($);
+    const okladka = this.getOkladka($);
+
+    const listaChapterow = this.getChaptery(data);
+    const chapteryWynik = <IPobieranieMangiWynikDTOChapter[]>[];
+    listaChapterow.forEach((el, i) => {
+      const url = this.getChapterURL(el.Chapter);
+      const dataDodania = el.Date.slice(0, -9);
+      const numer = this.getChapterNumer(el.Chapter);
+      const kolejnosc = listaChapterow.length - 1 - i;
+
+      chapteryWynik.push({
+        url,
+        dataDodania,
+        numer,
+        kolejnosc,
+      });
+    });
+
+    return {
+      manga: {
+        tytul,
+        okladka,
+      },
+      chaptery: chapteryWynik.sort((a, b) => a.kolejnosc - b.kolejnosc),
+    };
   }
 }
 
