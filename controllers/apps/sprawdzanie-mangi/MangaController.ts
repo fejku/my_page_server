@@ -122,6 +122,7 @@ class MangaController {
 
   public edit = async (request: express.Request, response: express.Response) => {
     const { id } = request.params;
+
     try {
       const zedtowanaManga = await MangaModel.findByIdAndUpdate(id, request.body, { new: true });
 

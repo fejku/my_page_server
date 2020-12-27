@@ -31,7 +31,7 @@ abstract class MangaParser {
         url,
         dataDodania,
         numer,
-        kolejnosc: i + 1,
+        kolejnosc: i,
       });
     });
 

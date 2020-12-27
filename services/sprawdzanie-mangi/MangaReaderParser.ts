@@ -10,7 +10,7 @@ class MangaReaderParser extends MangaParser {
 
   protected getOkladka(root: cheerio.Root): string {
     const okladka = root(".d38 img").attr("src");
-    return okladka ? `https://${okladka}` : "";
+    return okladka ? `https:/${okladka}` : "";
   }
 
   protected getChaptery(root: cheerio.Root): cheerio.Cheerio {
