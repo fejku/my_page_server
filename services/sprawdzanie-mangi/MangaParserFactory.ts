@@ -1,7 +1,7 @@
 import FanFoxParser from "./FanFoxParser";
 import MangaReaderParser from "./MangaReaderParser";
 import TaadParser from "./TaadParser";
-import MangaSeeParser from "./MangaSeeParser";
+import MangaSee123Parser from "./MangaSee123Parser";
 
 enum HOSTNAME {
   MANGA_READER = "www.mangareader.net",
@@ -27,7 +27,7 @@ class MangaParserFactory {
       case HOSTNAME.MANGA_FANFOX:
         return new FanFoxParser(url);
       case HOSTNAME.MANGA_SEE123:
-        return new MangaSeeParser(url);
+        return new MangaSee123Parser(url);
       case HOSTNAME.MANGA_TAAD:
         return new TaadParser(url);
       default:

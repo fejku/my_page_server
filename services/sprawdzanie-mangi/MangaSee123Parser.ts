@@ -13,7 +13,7 @@ interface IWynikPobieraniaChapterow {
   ChapterName: string | null;
 }
 
-class MangaSeeParser {
+class MangaSee123Parser {
   constructor(protected readonly url: string) {} // eslint-disable-line no-empty-function
 
   private getTytul(root: cheerio.Root): string {
@@ -57,7 +57,9 @@ class MangaSeeParser {
     if (chapterHalfNumber !== 0) {
       chapterHalfNumberResult = `.${chapterHalfNumber}`;
     }
-    return `-chapter-${chapterFullNumber}${chapterHalfNumberResult}${indexResult}.html`;
+    return `https://mangasee123.com/read-online/${
+      this.url.split("/")[4] // Nazwa mangi
+    }-chapter-${chapterFullNumber}${chapterHalfNumberResult}${indexResult}.html`;
   };
 
   async parse(): Promise<IPobieranieMangiWynikDTO> {
@@ -94,4 +96,4 @@ class MangaSeeParser {
   }
 }
 
-export default MangaSeeParser;
+export default MangaSee123Parser;
