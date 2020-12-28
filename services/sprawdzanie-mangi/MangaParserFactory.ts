@@ -10,6 +10,13 @@ enum HOSTNAME {
   MANGA_TAAD = "www.taadd.com",
 }
 
+// Kolejne strony możliwe do dodania
+// https://www.mangatown.com/
+// https://www.mangahere.cc/
+// http://www.mangapark.me
+// https://manganelo.com
+// https://mangasee.net
+// http://www.tenmanga.com/
 class MangaParserFactory {
   static getParser(url: string) {
     const hostname = this.getHostname(url);
