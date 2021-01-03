@@ -11,11 +11,11 @@ class AuthController {
   public authenticateJWT(request: Request, response: Response, next: NextFunction) {
     passport.authenticate("jwt", { session: false }, (error, user, info) => {
       if (error) {
-        return response.status(401).json({ status: "error", code: { message: "unauthorized" } });
+        return response.json({ status: "error", code: { message: "unauthorized" } });
       }
 
       if (!user) {
-        return response.status(401).json({ status: "error", code: { message: "unauthorized" } });
+        return response.json({ status: "error", code: { message: "unauthorized" } });
       }
 
       request.user = user;
