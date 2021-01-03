@@ -33,6 +33,13 @@ class MangaController {
       const { _id } = <IUser>request.user;
       const { manga, chaptery }: IZapisanieMangiKryteriaDTO = request.body;
 
+      const ostatniaManga = await MangaModel.findOne().sort("-kolejnosc");
+
+      let maxKolejnosc = 0;
+      if (ostatniaManga) {
+        maxKolejnosc = ostatniaManga.kolejnosc;
+      }
+
       const createdManga = new MangaModel({
         user: _id,
         tytul: manga.tytul,
@@ -40,6 +47,7 @@ class MangaController {
         url: manga.url,
         aktualnyChapter: manga.aktualnyChapter,
         ostatnieOdswiezenie: new Date(),
+        kolejnosc: maxKolejnosc + 1,
       });
       const savedManga = await createdManga.save();
 

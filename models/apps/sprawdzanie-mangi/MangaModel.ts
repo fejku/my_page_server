@@ -7,6 +7,7 @@ export interface IManga extends Document {
   url: string;
   aktualnyChapter: string;
   ostatnieOdswiezenie: Date;
+  kolejnosc: number;
 }
 
 export const MangaSchema = new Schema({
@@ -16,6 +17,7 @@ export const MangaSchema = new Schema({
   url: { type: String, required: true },
   aktualnyChapter: { type: String, required: true },
   ostatnieOdswiezenie: { type: Date, required: true },
+  kolejnosc: { type: Number, required: true },
 });
 
 export const MangaModel = mongoose.model<IManga>("Manga", MangaSchema);
