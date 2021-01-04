@@ -12,7 +12,13 @@ class MangaController {
     try {
       const { _id } = <IUser>request.user;
       const mangi = await MangaModel.find({ user: _id });
-      response.send(mangi);
+
+      const result = [];
+      for (const manga of mangi) {
+        const najnowszyChapter = await ChapterModel.findOne({ manga: manga._id }).sort({ kolejnosc: -1 });
+        result.push({ ...manga.toObject(), najnowszyChapter: najnowszyChapter ? najnowszyChapter.numer : "-" });
+      }
+      response.send(result);
     } catch (error) {
       response.status(500).json({ message: `Błąd przy pobieraniu mang: ${error}` });
     }
