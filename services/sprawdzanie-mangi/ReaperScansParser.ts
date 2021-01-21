@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import cheerio from "cheerio";
+import * as chrono from "chrono-node";
 import MangaParser from "./MangaParser";
 
 class ReaperScansParser extends MangaParser {
@@ -24,8 +25,9 @@ class ReaperScansParser extends MangaParser {
   }
 
   protected getChapterDataDodania(root: cheerio.Root, element: cheerio.Element): string {
-    const dataDodania = root(element).find(".item-company").text();
-    return dataDodania.trim();
+    const dataDodania = root(element).find(".item-company").text().trim();
+    const sparsowanaData = chrono.parseDate(dataDodania);
+    return sparsowanaData.toISOString().split("T")[0];
   }
 
   protected getChapterNumer(root: cheerio.Root, element: cheerio.Element): string {
