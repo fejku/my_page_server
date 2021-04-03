@@ -4,6 +4,7 @@ import TaadParser from "./TaadParser";
 import MangaSee123Parser from "./MangaSee123Parser";
 import ReaperScansParser from "./ReaperScansParser";
 import AsuraScansParser from "./AsuraScansParser";
+import MixedMangaParser from "./MixedMangaParser";
 
 enum HOSTNAME {
   MANGA_READER = "www.mangareader.net",
@@ -12,6 +13,7 @@ enum HOSTNAME {
   MANGA_TAAD = "www.taadd.com",
   MANGA_REAPER_SCANS = "reaperscans.com",
   MANGA_ASURA_SCANS = "asurascans.com",
+  MANGA_MIXED_MANGA = "mixedmanga.com",
 }
 
 // Kolejne strony możliwe do dodania
@@ -21,6 +23,7 @@ enum HOSTNAME {
 // https://manganelo.com
 // https://mangasee.net
 // http://www.tenmanga.com/
+// https://mixedmanga.com
 class MangaParserFactory {
   static getParser(url: string) {
     const hostname = this.getHostname(url);
@@ -38,6 +41,8 @@ class MangaParserFactory {
         return new ReaperScansParser(url);
       case HOSTNAME.MANGA_ASURA_SCANS:
         return new AsuraScansParser(url);
+      case HOSTNAME.MANGA_MIXED_MANGA:
+        return new MixedMangaParser(url);
       default:
         throw new Error(`Nie obsługiwany parser: ${hostname}.`);
     }
